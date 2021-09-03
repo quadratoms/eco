@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muranda {{products.0.category.name}}</title>
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet"> {% comment %}
+    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'nivo-slider/css/nivo-slider.css' %}" rel="stylesheet"> {% comment %}
+    <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+    <header id="header" class="fixed-top">
+        <div class="container d-flex">
+
+            <div class="logo mr-auto">
+                <h1 class="text-light"><a href="index.html"><span>M</span>aranda</a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class=""><a href="/">Home</a></li>
+                    <!-- <li disable><a href="#team">Team</a></li> -->
+                    <li class="drop-down active"><a href="">Category</a>
+                        <ul>
+                            {% for c in cat %}
+                            <li><a href="/cat/{{c.id}}">{{c.name}}</a></li>
+                            {% endfor %}
+
+
+                        </ul>
+                    </li>
+                    {% if user.is_authenticated %}
+
+                    <li><a href="/cart">Cart</a></li>
+                    {% else %}
+                    <li><a href="/accounts/login">Login</a></li>
+                    {% endif %}
+                    <li><a href="/about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+
+                </ul>
+            </nav>
+            <!-- .nav-menu -->
+
+        </div>
+    </header>
+    <!-- End Header -->
+
+
+    <div class="container-fluid m-3 pt-5">
+        <div class="row pt-5">
+            <div class="col-3 border p-2 shadow-sm">
+                <h4>CATEGORIES</h4>
+                {% for each in cat%}
+
+                <div class="shadow px-2 py-1">
+                    <a href="/cat/{{each.id}}">
+                        <h6 class="font-weight-bold ">{{each.name}}<span>+</span></h6>
+                    </a>
+                </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-9 ">
+                <div class="container border  shadow-sm mx-1">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="section-headline text-center">
+                                <h2>{{ products.0.category.name }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="gallery">
+                        <ul class="row">
+                            {% for each in products %}
+
+                            <div class="col-sm-4  ">
+                                <div class="border shadow p-2 bg-light">
+                                    <a href="/product/{{each.id}}">
+                                        <img class="card-img-top" src="{{each.image.url}}" alt="">
+                                        <div class="card-body">
+                                            <h4 class="card-title text-center">{{each.name}}</h4>
+                                            <div class="d-flex justify-content-center"><span>N </span>{{each.price}}</div>
+                                            {% if each.discount %}
+                                            <div class="d-flex justify-content-center text-success"><span>N </span>{{each.price}}</div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                </div>
+                                <a href="/addto/{{each.id}}">
+                                    <<button class="btn btn-warning  ml-2">Add To Cart</button>
+                                </a>
+
+                            </div>
+                            {% endfor %}
+
+                        </ul>
+                        <div class="pagination">
+                            <!-- <ul disable>
+                                <li class="firstpage"><a href="#">First</a></li>
+                                <li><a href="#">&laquo; Previous</a></li>
+                                <li><a href="#">1</a></li>
+                                <li class="current">2</li>
+                                <li><a href="#">3</a></li>
+                                <li class="divider">&hellip;</li>
+                                <li><a href="#">18</a></li>
+                                <li><a href="#">19</a></li>
+                                <li><a href="#">20</a></li>
+                                <li><a href="#">Next &raquo;</a></li>
+                                <li class="lastpage"><a href="#">Last</a></li>
+                            </ul> -->
+                        </div>
+                    </div>
+                    <!-- ############################################################################################## -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <div class="footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <div class="footer-logo">
+                                    <h2><span>M</span>uranda</h2>
+                                </div>
+
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+                                <div class="footer-icons">
+                                    <ul>
+                                        <li>
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-google"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>information</h4>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+                                </p>
+                                <div class="footer-contacts">
+                                    <p><span>Tel:</span> +123 456 789</p>
+                                    <p><span>Email:</span> contact@muranda.com</p>
+                                    <p><span>Working Hours:</span> 8am-5pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>Instagram</h4>
+                                <div class="flicker-img">
+                                    <a href="#"><img src="assets/img/portfolio/1.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/2.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/3.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/4.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/5.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/6.jpg" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-area-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="copyright text-center">
+                            <p>
+                                &copy; Copyright <strong>Muranda</strong>. All Rights Reserved
+                            </p>
+                        </div>
+                        <div class="credits">
+                            <!--
+                      All the links in the footer should remain intact.
+                      You can delete the links only if you purchased the pro version.
+                      Licensing information: https://bootstrapmade.com/license/
+                      Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=eBusiness
+                    -->
+                            Designed by <a href="/">Quadratoms</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script src="{% static 'jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap.js' %}"></script>
+    {% comment %}
+    <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/php-email-form/validate.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/appear/jquery.appear.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/knob/jquery.knob.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/parallax/parallax.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/wow/wow.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script> {% endcomment %}
+    <script src="{% static 'nivo-slider/js/jquery.nivo.slider.js' %}"></script>
+    {% comment %}
+    <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/venobox/venobox.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/jquery.min.js"></script> {% endcomment %}
+
+</body>
+
+</html>

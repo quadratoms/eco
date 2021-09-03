@@ -1,0 +1,319 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muranda {{products.0.category.name}}</title>
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet"> {% comment %}
+    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'nivo-slider/css/nivo-slider.css' %}" rel="stylesheet"> {% comment %}
+    <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet"> {% endcomment %} {% comment %}
+    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+    <header id="header" class="fixed-top">
+        <div class="container d-flex">
+
+            <div class="logo mr-auto">
+                <h1 class="text-light"><a href="/"><span>M</span>aranda</a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class=""><a href="/">Home</a></li>
+                    <!-- <li disable><a href="#team">Team</a></li> -->
+                    <li class="drop-down active"><a href="">Category</a>
+                        <ul>
+                            {% for c in cat %}
+                            <li><a href="/cat/{{c.id}}">{{c.name}}</a></li>
+                            {% endfor %}
+
+
+                        </ul>
+                    </li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+
+                </ul>
+            </nav>
+            <!-- .nav-menu -->
+
+        </div>
+    </header>
+    <!-- End Header -->
+
+
+    <div class="container-fluid m-3 pt-5">
+        <div class="row pt-5">
+            <div class="col-3 border p-2 shadow-sm">
+                <h4>CATEGORIES</h4>
+                {% for each in cat%}
+
+                <div class="shadow px-2 py-1">
+                    <a href="/cat/{{each.id}}">
+                        <h6 class="font-weight-bold ">{{each.name}}<span>+</span></h6>
+                    </a>
+                </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-9 ">
+                <main>
+                    <div class="container">
+
+                        <div class="table-responsive text-nowrap">
+                            <h2>Order Summary</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Item title</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total Item Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order_item in order.items.all %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ order_item.item.title }}</td>
+                                        <td>{{ order_item.item.price }}</td>
+                                        <td>
+                                            <a href="/singleremove/{{order_item.item.id}}"><i class="fas fa-minus mr-2"></i></a> {{ order_item.quantity }}
+                                            <a href="/addto/{{order_item.item.id}}"><i class="fas fa-plus ml-2"></i></a>
+                                        </td>
+                                        <td>
+                                            {% if order_item.item.discount %} ${{ order_item.get_total_discount_item_price }}
+                                            <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span> {% else %} ${{ order_item.get_total_item_price }} {% endif %}
+                                            <a style='color: red;' href="/remove/{{order_item.item.id}}">
+                                                <i class="fas fa-trash float-right"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan='5'>Your cart is empty</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %} {% comment %} {% if object.coupon %}
+                                    <tr>
+                                        <td colspan="4"><b>Coupon</b></td>
+                                        <td><b>-${{ object.coupon.amount }}</b></td>
+                                    </tr>
+                                    {% endif %} {% endcomment %} {% if order.get_total %}
+                                    <tr>
+                                        <td colspan="4"><b>Order Total</b></td>
+                                        <td><b>${{ order.get_total }}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-warning float-right ml-2" data-toggle="modal" data-target="#modelId">
+                                                Proceed to checkout                            </button>
+
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Muranda</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h6>choose an option</h6>
+                                                            <div class="">
+                                                                <form>
+                                                                    <button class="btn  btn-info" type="button" onclick="payWithPaystack()"> Paystack </button>
+                                                                </form>
+
+                                                                <p>OR</p>
+                                                                <div class="btn btn-success">Whatsapp <span>080---------</span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <div class="footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <div class="footer-logo">
+                                    <h2><span>M</span>uranda</h2>
+                                </div>
+
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+                                <div class="footer-icons">
+                                    <ul>
+                                        <li>
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-google"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>information</h4>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+                                </p>
+                                <div class="footer-contacts">
+                                    <p><span>Tel:</span> +123 456 789</p>
+                                    <p><span>Email:</span> contact@muranda.com</p>
+                                    <p><span>Working Hours:</span> 8am-5pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>Instagram</h4>
+                                <div class="flicker-img">
+                                    <a href="#"><img src="assets/img/portfolio/1.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/2.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/3.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/4.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/5.jpg" alt=""></a>
+                                    <a href="#"><img src="assets/img/portfolio/6.jpg" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-area-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="copyright text-center">
+                            <p>
+                                &copy; Copyright <strong>Muranda</strong>. All Rights Reserved
+                            </p>
+                        </div>
+                        <div class="credits">
+                            <!--
+                      All the links in the footer should remain intact.
+                      You can delete the links only if you purchased the pro version.
+                      Licensing information: https://bootstrapmade.com/license/
+                      Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=eBusiness
+                    -->
+                            Designed by <a href="/">Quadratoms</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function payWithPaystack() {
+            var handler = PaystackPop.setup({
+                key: 'pk_test_beac4efb5dcee8173e8ff51677bb2d102d15fae7',
+                email: '{{user.email}}',
+                amount: '{{order.get_total}}',
+                ref: '{{order.ref_code}}',
+                metadata: {
+                    custom_fields: [{
+                        display_name: "{{user}}",
+                        variable_name: "mobile_number",
+                        value: "+2348012345678"
+                    }]
+                },
+                callback: function(response) {
+
+                    alert('success. transaction ref is ' + response.reference);
+                    window.location.replace('/verify/{{order.ref_code}}')
+                    console.log(response)
+                },
+                onClose: function() {
+                    null
+
+                    //alert('window closed');
+                }
+            });
+            handler.openIframe();
+        }
+    </script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="{% static 'jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap.js' %}"></script>
+    {% comment %}
+    <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/php-email-form/validate.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/appear/jquery.appear.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/knob/jquery.knob.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/parallax/parallax.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/wow/wow.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script> {% endcomment %}
+    <script src="{% static 'nivo-slider/js/jquery.nivo.slider.js' %}"></script>
+    {% comment %}
+    <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/vendor/venobox/venobox.min.js"></script> {% endcomment %} {% comment %}
+    <script src="assets/jquery.min.js"></script> {% endcomment %}
+
+</body>
+
+</html>
